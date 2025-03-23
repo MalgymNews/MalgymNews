@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Přihlásit se</title>
+</head>
+<body>
+  <h1>Přihlášení</h1>
+  <input id="user" placeholder="Uživatel"><br>
+  <input id="pass" placeholder="Heslo" type="password"><br>
+  <button onclick="login()">Přihlásit se</button>
+
+  <script>
+    function login() {
+        fetch('https://api.malgymnews.eu/login', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    username: document.getElementById('user').value,
+    password: document.getElementById('pass').value
+  })
+})
+.then(r => {
+  if (r.ok) {
+    localStorage.setItem('user', document.getElementById('user').value);
+    localStorage.setItem('loginTime', Date.now());
+    window.location.href = 'precist.html';
+  } else {
+    alert('Špatné přihlašovací údaje');
+  }
+});
+
+    }
+  </script>
+</body>
+</html>
