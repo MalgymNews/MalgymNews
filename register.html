@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Zaregistrovat Se</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar-top">
+    <ul class="navbar-menu">
+        <li><a href="index.html">Domů</a></li>
+        <li><a href="onas.html">O Nás</a></li>
+        <li><a href="precist.html">Přečíst</a></li>
+    </ul>
+</nav>
+<div class="content">
+  <div class="content-servis">
+  <h1>Registrace</h1>
+  <input id="user" placeholder="Uživatel"><br>
+  <input id="pass" placeholder="Heslo" type="password"><br>
+  <input id="email" placeholder="Email" type="email"><br>
+  <br>
+  <button onclick="register()">Zaregistrovat se</button>
+  <h6>Již máte účet? <a href="https://www.malgymnews.eu/login.html">Přihlásit Se</a></h6>
+  </div>
+</div>
+
+  <script>
+    function register() {
+      fetch('https://api.malgymnews.eu/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: document.getElementById('user').value,
+          password: document.getElementById('pass').value,
+          email: document.getElementById('email').value
+        })
+      })
+      .then(res => {
+        if (res.ok) {
+          alert('Účet vytvořen, přihlaš se.');
+          window.location.href = 'login.html';
+        } else {
+          alert('Uživatel už existuje nebo došlo k chybě.');
+        }
+      })
+      .catch(err => {
+        console.error("Chyba při fetchi:", err);
+        alert("Chyba při registraci.");
+      });
+    }
+  </script>
+</body>
+</html>
