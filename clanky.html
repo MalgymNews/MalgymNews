@@ -32,7 +32,7 @@
     </div>
 
     <script>
-        fetch("/clanky")
+        fetch("https://api.malgymnews.eu/clanky")
             .then(res => res.json())
             .then(data => {
                 const container = document.getElementById("clanky-container");
