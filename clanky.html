@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Články | Malgym News</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #iframe-container {
+            display: none;
+            margin: 20px auto;
+            width: 90%;
+            height: 500px;
+            border: 2px solid #ccc;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .contact-card:hover {
+            background-color: #111;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGACE -->
+    <nav class="navbar-top">
+        <ul class="navbar-menu">
+            <li><a href="index.html">Domů</a></li>
+            <li><a href="onas.html">O Nás</a></li>
+            <li><a href="clanky.html" class="active">Články</a></li>
+            <li><a href="precist.html">Přečíst</a></li>
+        </ul>
+    </nav>
+
+    <!-- HLAVNÍ OBSAH -->
+    <div class="content-servis">
+        <h1 class="orangeh1">Školní články</h1>
+    </div>
+
+    <!-- IFRAME PRO ČLÁNEK -->
+    <div id="iframe-container">
+        <iframe id="article-frame"></iframe>
+    </div>
+
+    <!-- SEZNAM ČLÁNKŮ -->
+    <div class="contact-info" id="clanky-container">
+        <p>Načítání článků...</p>
+    </div>
+
+    <!-- PATIČKA -->
+    <div class="footer-text">
+        <p>&copy; 2025 MalgymNews. Všechna práva vyhrazena. <a href="terms.html">TOS</a></p>
+    </div>
+
+    <script>
+        fetch("https://api.malgymnews.eu/clanky")  // Změň URL podle toho, kde běží Flask
+            .then(res => res.json())
+            .then(data => {
+                const container = document.getElementById("clanky-container");
+                container.innerHTML = "";
+
+                if (data.length === 0) {
+                    container.textContent = "Žádné články nebyly nalezeny.";
+                    return;
+                }
+
+                data.forEach(clanek => {
+                    const card = document.createElement("div");
+                    card.className = "contact-card";
+
+                    const img = document.createElement("img");
+                    img.src = clanek.obrazek;
+                    img.alt = clanek.nadpis;
+
+                    const h3 = document.createElement("h3");
+                    h3.textContent = clanek.nadpis;
+
+                    const p = document.createElement("p");
+                    p.textContent = clanek.popis;
+
+                    card.onclick = () => {
+                        const iframeContainer = document.getElementById("iframe-container");
+                        const iframe = document.getElementById("article-frame");
+                        iframe.src = `https://api.malgymnews.eu/clankydata/${clanek.id}/main.html`; // změň dle potřeby
+                        iframeContainer.style.display = "block";
+                        window.scrollTo({ top: iframeContainer.offsetTop - 60, behavior: "smooth" });
+                    };
+                    card.style.cursor = "pointer";
+
+                    card.appendChild(img);
+                    card.appendChild(h3);
+                    card.appendChild(p);
+
+                    container.appendChild(card);
+                });
+            })
+            .catch(err => {
+                document.getElementById("clanky-container").textContent = "Chyba při načítání článků.";
+                console.error(err);
+            });
+    </script>
+</body>
+</html>
