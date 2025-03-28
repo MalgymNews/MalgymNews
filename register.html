@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Zaregistrovat Se</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar-top">
+    <ul class="navbar-menu">
+        <li><a href="index.html">Domů</a></li>
+        <li><a href="onas.html">O Nás</a></li>
+        <li><a href="clanky.html">Články</a></li>
+        <li><a href="precist.html">Přečíst</a></li>
+    </ul>
+</nav>
+<div class="content">
+  <div class="content-servis">
+  <h1>Registrace</h1>
+  <input id="username" placeholder="Uživatelské Jméno"><br>
+  <input id="realname" placeholder="Realné Jméno"><br>
+  <input id="password" placeholder="Heslo" type="password"><br>
+  <input id="email" placeholder="Email" type="email"><br>
+  <input id="podminky" type="checkbox"> Souhlasím s <a href="terms.html">podmínkami použití</a> 
+  <br>
+  <button onclick="register()">Zaregistrovat se</button>
+  <h6>Již máte účet? <a href="login.html">Přihlásit Se</a></h6>
+  </div>
+  <div class="footer-text">
+    <p>&copy; 2025 MalgymNews. Všechna práva vyhrazena. <a href="terms.html">TOS</a></p>
+</div>
+</div>
+
+  <script>
+    function register() {
+      var podminky = document.getElementById('podminky').checked
+      if (podminky == true){
+        fetch('https://api.malgymnews.eu/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: document.getElementById('username').value,
+            username: document.getElementById('realname').value,
+            password: document.getElementById('password').value,
+            email: document.getElementById('email').value,
+            podminky: document.getElementById('podminky').value
+          })
+        })
+        .then(res => {
+          if (res.ok) {
+            alert('Účet vytvořen, přihlaš se.');
+            window.location.href = 'login.html';
+          } else {
+            alert('Uživatel už existuje nebo došlo k chybě.');
+          }
+        })
+        .catch(err => {
+          console.error("Chyba při fetchi:", err);
+          alert("Chyba při registraci.");
+        });
+      } else {
+        alert("Je nutné akceptovat podmínky použití.");
+      }
+    }
+  </script>
+</body>
+</html>

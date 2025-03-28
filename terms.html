@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Malgym News</title>
+    <script>
+        fetch('https://api.malgymnews.eu/date/nextnews')  // ← změň na správnou URL
+            .then(response => response.json())
+            .then(data => {
+                // Odečti 1 od měsíce – JavaScript počítá měsíce od 0 (leden)
+                const targetDate = new Date(data.r, data.m - 1, data.d, 0, 0, 0);
+        
+                const countdownElement = document.getElementById('countdown');
+        
+                function updateCountdown() {
+                    const now = new Date();
+                    const diff = targetDate - now;
+        
+                    if (diff <= 0) {
+                        countdownElement.textContent = "Dnes je nové vidání! 🎉";
+                        clearInterval(interval);
+                        return;
+                    }
+        
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+                    const seconds = Math.floor((diff / 1000) % 60);
+        
+                    countdownElement.textContent = 
+                        `Další noviny za ${days} dní ${hours} hodin ${minutes} minut ${seconds} sekund`;
+                }
+        
+                // Spusť ihned a pak každou sekundu
+                updateCountdown();
+                const interval = setInterval(updateCountdown, 1000);
+            })
+            .catch(error => {
+                document.getElementById('countdown').textContent = "Chyba při načítání data.";
+                console.error("Chyba při načítání:", error);
+            });
+        </script>
+        
+</head>
+<body>
+    <div class="content">
+        <nav class="navbar-top">
+            <ul class="navbar-menu">
+                <li><a href="index.html">Domů</a></li>
+                <li><a href="onas.html">O Nás</a></li>
+                <li><a href="clanky.html">Články</a></li>
+                <li><a href="precist.html">Přečíst</a></li> 
+            </ul>
+        </nav>
+
+        <div class="content-servis" style="max-width: 500px;margin: 0 auto; text-align: center;">
+          <h1>Podmínky užívání webových stránek malgymnews.eu</h1>
+
+          <h2>1. Úvodní ustanovení</h2>
+          <p>
+            Tyto podmínky užívání (dále jen „Podmínky“) upravují práva a povinnosti mezi provozovatelem webových stránek <strong>www.malgymnews.eu</strong> a <strong>api.malgymnews.eu</strong> (dále jen „Web“) a jejich uživateli (dále jen „Uživatel“). Přístupem na Web Uživatel potvrzuje, že se s těmito Podmínkami seznámil a souhlasí s nimi.
+          </p>
+        
+          <h2>2. Rozsah služeb</h2>
+          <p>
+            Web poskytuje služby spočívající ve zpřístupňování digitálního obsahu (zejména novinových článků). Registrace a přihlašování uživatelů je realizováno prostřednictvím domény <strong>api.malgymnews.eu</strong>.
+          </p>
+        
+          <h2>3. Duševní vlastnictví</h2>
+          <p>
+            Veškerý obsah zveřejněný na Webu je chráněn právními předpisy o duševním vlastnictví a je vlastnictvím Provozovatele nebo třetích stran. Jakékoliv neoprávněné šíření, kopírování, úprava či využití obsahu bez předchozího písemného souhlasu Provozovatele je zakázáno.
+          </p>
+        
+          <h2>4. Uživatelské povinnosti</h2>
+          <p>
+            Uživatel se zavazuje nezasahovat do technického fungování Webu, nešířit škodlivý obsah a nezneužívat přístup k chráněným částem systému. Uživatel je povinen chránit své přístupové údaje a nese odpovědnost za jejich zneužití.
+          </p>
+        
+          <h2>5. Odpovědnost a omezení záruk</h2>
+          <p>
+            Web je poskytován „tak, jak je“, bez jakýchkoliv záruk. Provozovatel nenese odpovědnost za škody vzniklé nedostupností Webu, chybností obsahu ani jeho použitím.
+          </p>
+          <p>
+            <strong>Provozovatel dále nenese odpovědnost za případné odcizení databáze, únik osobních údajů, kompromitaci systému či jiný bezpečnostní incident, přestože byla učiněna veškerá přiměřená technická a organizační opatření.</strong>
+          </p>
+        
+          <h2>6. Odkazy na externí stránky</h2>
+          <p>
+            Web může obsahovat odkazy na webové stránky třetích stran. Provozovatel nenese odpovědnost za obsah těchto webů ani za škody vzniklé jejich užíváním.
+          </p>
+        
+          <h2>7. Změny podmínek</h2>
+          <p>
+            Provozovatel si vyhrazuje právo kdykoli jednostranně změnit tyto Podmínky. Nové znění bude zveřejněno na Webu a je účinné okamžikem zveřejnění.
+          </p>
+        
+          <h2>8. Závěrečná ustanovení</h2>
+          <p>
+            Tyto Podmínky se řídí právním řádem České republiky. Jakékoliv spory budou řešeny příslušným soudem dle sídla Provozovatele.
+          </p>
+        
+          <h2>9. Zákaz sdílení zakoupeného obsahu a pravidla pro kredity</h2>
+          <p>
+            Zakoupené novinové články a další digitální obsah zpřístupněný uživateli po zakoupení je určen výhradně pro osobní potřebu daného uživatele.
+          </p>
+          <p>
+            <strong>Uživatel není oprávněn tento obsah jakkoliv sdílet, zpřístupňovat, kopírovat, přeposílat nebo jinak šířit třetím osobám, a to ani bezúplatně, ani za úplatu.</strong> Jakékoliv porušení této podmínky může být považováno za porušení autorských práv a může vést k právním krokům ze strany Provozovatele.
+          </p>
+          <p>
+            V případě porušení těchto Podmínek si Provozovatel vyhrazuje právo bez náhrady <strong>zrušit uživatelský účet</strong> a <strong>odebrat všechny zbývající kredity</strong>, a to bez povinnosti jakékoliv kompenzace.
+          </p>
+          <p>
+            <strong>Kredity nejsou vratné, nepřevoditelné a nelze je reklamovat.</strong> Uživatel bere na vědomí, že kredity nemají peněžní hodnotu a nelze je směnit za hotovost.
+          </p>
+          <p>
+            V případě technické nefunkčnosti systému (např. nemožnost zhlednout noviny online), má uživatel nárok na <strong>fyzický výtisk</strong> zakoupených novin. V takovém případě je nutné <strong>kontaktovat člena týmu malgymnews</strong>, který zajistí náhradní doručení.
+          </p>
+        
+          <h2>10. Kontakt</h2>
+          <p>
+            V případě dotazů nás prosím kontaktujte na e-mailové adrese: <strong>info@malgymnews.eu</strong>
+            V případě technických problémů nás prosím kontaktujte na e-mailové adrese: <strong>problemy@malgymnews.eu</strong>
+          </p>
+        </div>
+
+        <div class="footer-text">
+            <p>&copy; 2025 MalgymNews. Všechna práva vyhrazena. <a href="terms.html">TOS</a></p>
+        </div>
+    </div>
+</body>
+</html>
