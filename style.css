@@ -1,0 +1,167 @@
+/* === RESET & ZÁKLADNÍ NASTAVENÍ === */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #1a1a1a;
+  color: white;
+}
+
+/* === NAVBAR (společný pro všechny stránky) === */
+.navbar {
+  background-color: orange;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.navbar a {
+  color: black;
+  text-decoration: none;
+  margin: 0 15px;
+  font-weight: bold;
+  transition: color 0.3s, text-decoration 0.3s;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
+}
+
+.navbar .active {
+  text-decoration: underline;
+}
+
+/* === SEKCE TÝMU === */
+.team-section {
+  padding: 40px 20px;
+}
+
+.team-title {
+  text-align: center;
+  color: orange;
+  font-size: 2.2em;
+  margin-bottom: 40px;
+}
+
+.team-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.team-card {
+  background-color: #2a2a2a;
+  border-radius: 10px;
+  padding: 20px;
+  width: 220px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.team-card img {
+  width: 100px;
+  height: 100px;
+  border-radius: 5px;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.team-card h3 {
+  color: orange;
+  margin-bottom: 10px;
+}
+
+.team-card p {
+  color: white;
+  margin-top: 10px;
+  font-size: 0.95em;
+}
+
+.badges {
+  margin: 5px 0;
+}
+
+.badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 0.9em;
+  margin: 2px;
+}
+
+/* === ÚVODNÍ STRÁNKA – POZADÍ A BOX === */
+.hero-section {
+  height: 100vh;
+  background-image: url('background.jpg'); /* Ujisti se, že obrázek existuje */
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 5%;
+}
+
+.hero-box {
+  background-color: rgba(0, 0, 0, 0.65);
+  padding: 40px;
+  border-radius: 15px;
+  text-align: center;
+  max-width: 350px;
+}
+
+.hero-box.left {
+  margin-left: 0;
+}
+
+.hero-box h1 {
+  color: orange;
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+
+.hero-box p {
+  font-size: 1.1em;
+  margin-bottom: 25px;
+  font-style: italic;
+  color: white;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  text-decoration: none;
+  padding: 12px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  font-size: 1em;
+  display: inline-block;
+}
+
+.btn-register {
+  background-color: #00c853;
+  color: white;
+}
+
+.btn-register:hover {
+  background-color: #00b248;
+}
+
+.btn-read {
+  background-color: #0288d1;
+  color: white;
+}
+
+.btn-read:hover {
+  background-color: #0277bd;
+}

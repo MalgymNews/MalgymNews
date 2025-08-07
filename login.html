@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Přihlášení – Školní noviny</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="role.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #1c1c1c;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .form-container {
+      max-width: 400px;
+      margin: 80px auto;
+      background: linear-gradient(to bottom, #ffffff, #f1f1f1);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #000;
+    }
+
+    .form-container label {
+      display: block;
+      margin-bottom: 5px;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .form-container input,
+    .form-container button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border-radius: 6px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+    }
+
+    .form-container button {
+      background-color: #ffa500;
+      color: black;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .form-container button:hover {
+      background-color: #e59400;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html">Domů</a>
+  <a href="onas.html">O nás</a>
+  <a href="precist.html">Přečíst</a>
+  <a href="register.html">Registrace</a>
+</nav>
+
+<section class="form-container">
+  <h2>Přihlášení</h2>
+  <form id="login-form">
+    <label for="username">Uživatelské jméno:</label>
+    <input type="text" id="username" required>
+
+    <label for="password">Heslo:</label>
+    <input type="password" id="password" required>
+
+    <button type="submit">Přihlásit se</button>
+  </form>
+</section>
+
+<script>
+  document.getElementById("login-form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    const res = await fetch("http://localhost:5007/login", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ username, password })
+    });
+
+    const data = await res.json();
+    if (data.status === "success") {
+      localStorage.setItem("cookie", data.cookie);
+      window.location.href = "precist.html";
+    } else {
+      alert(data.message);
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+/* Styly pro jednotlivé role */
+
+.redaktor {
+  background-color: orange;
+  color: black;
+}
+
+.reporter {
+  background-color: purple;
+  color: white;
+}
+
+.oprava {
+  background-color: deepskyblue;
+  color: white;
+}
+
+.tisk-foto {
+  background-color: chocolate;
+  color: white;
+}
+
+.itspravce {
+  background-color: darkred;
+  color: white;
+}
+
+.trida-2AG {
+  background-color: limegreen;
+  color: black;
+}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Přihláška do školních novin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      padding: 40px;
+    }
+
+    .form-container {
+      background-color: white;
+      max-width: 500px;
+      margin: auto;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container h2 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      width: 100%;
+      background-color: #007bff;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Přihláška do školních novin</h2>
+    <form id="recruitForm">
+      <input type="text" name="name" placeholder="Jméno a příjmení" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <textarea name="why" placeholder="Proč se chceš připojit?" rows="5" required></textarea>
+      <button type="submit">Odeslat přihlášku</button>
+    </form>
+    <p id="response" style="text-align:center; margin-top:20px;"></p>
+  </div>
+
+  <script>
+    document.getElementById('recruitForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+
+      const res = await fetch('http://localhost:5007/nabor', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+      const responseEl = document.getElementById('response');
+      if (result.status === 'success') {
+        responseEl.textContent = '✅ Přihláška byla úspěšně odeslána.';
+        this.reset();
+      } else {
+        responseEl.textContent = '❌ Chyba: ' + result.message;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Školní noviny</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="role.css">
+  <style>
+    .recruit-section {
+      background-color: #f2f2f2;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .recruit-section h2 {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    .recruit-section p {
+      font-size: 1.2em;
+      max-width: 600px;
+      margin: 0 auto 30px;
+    }
+
+    .recruit-section img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 30px;
+      border-radius: 12px;
+    }
+
+    .btn-join {
+      padding: 12px 24px;
+      font-size: 1em;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+    }
+
+    .btn-join:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigační lišta -->
+<nav class="navbar">
+  <a href="index.html" class="active">Domů</a>
+  <a href="onas.html">O nás</a>
+  <a href="precist.html">Přečíst</a>
+  <a href="register.html">Registrace</a>
+</nav>
+
+<!-- Úvodní sekce -->
+<div class="hero-section">
+  <div class="hero-box left">
+    <h1>Školní noviny</h1>
+    <p>Aktuálně ze života naší školy</p>
+    <div class="button-group">
+      <a href="zaregistrovat.html" class="btn btn-register">Zaregistrovat se</a>
+      <a href="precist.html" class="btn btn-read">Přečíst</a>
+    </div>
+  </div>
+</div>
+
+<!-- Náborová sekce -->
+<div class="recruit-section" style="position: relative; text-align: center; color: white;">
+  <img src="nabor.jpg" alt="Nábor do školního časopisu" style="width: 100%; height: auto; display: block;">
+
+  <div style="
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 90%;
+  ">
+    <h2 style="margin-bottom: 15px;">Hledáme nové redaktory!</h2>
+    <p style="font-size: 1.2em; margin-bottom: 20px;">
+      Baví tě psaní, fotografie, nebo tvorba videí? Přidej se k našemu týmu školních novin a podílej se na tvorbě obsahu, který čtou všichni ve škole!
+    </p>
+    <a href="nabor.html" style="
+      padding: 12px 24px;
+      font-size: 1em;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+    " onmouseover="this.style.backgroundColor='#0056b3'" onmouseout="this.style.backgroundColor='#007bff'">Přidej se k nám</a>
+  </div>
+</div>
+
+
+</body>
+</html>
