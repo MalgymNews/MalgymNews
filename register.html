@@ -109,7 +109,7 @@
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
 
-    const res = await fetch("http://localhost:5007/register", {
+    const res = await fetch("https://api.malgymnews.eu/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, email, password })
@@ -127,3 +127,4 @@
 
 </body>
 </html>
+
