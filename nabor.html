@@ -67,7 +67,7 @@
       const formData = new FormData(this);
       const data = Object.fromEntries(formData.entries());
 
-      const res = await fetch('http://localhost:5007/nabor', {
+      const res = await fetch('https://api.malgymnews.eu/nabor', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -87,3 +87,4 @@
   </script>
 </body>
 </html>
+
