@@ -156,7 +156,7 @@
 
         async function loadCredits() {
             try {
-                const response = await fetch("http://localhost:5007/getcredits", {
+                const response = await fetch("https://api.malgymnews.eu/getcredits", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ cookie })
@@ -174,7 +174,7 @@
 
         async function getUsernameFromCookie() {
             try {
-                const response = await fetch("http://localhost:5007/loginwithcookie", {
+                const response = await fetch("https://api.malgymnews.eu/loginwithcookie", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ cookie })
@@ -196,7 +196,7 @@
 
         async function loadNews() {
             try {
-                const response = await fetch("http://localhost:5007/getnewsdata", {
+                const response = await fetch("https://api.malgymnews.eu/getnewsdata", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ cookie })
@@ -249,7 +249,7 @@
             
             // Přidáme náhodný parametr, aby prohlížeč neukládal do cache
             const randomParam = Date.now();
-            const pdfUrl = `http://localhost:5007/get_news?cookie=${cookie}&news_id=${news_id}&t=${randomParam}`;
+            const pdfUrl = `https://api.malgymnews.eu/get_news?cookie=${cookie}&news_id=${news_id}&t=${randomParam}`;
             
             document.getElementById('pdf-viewer').src = pdfUrl;
             pdfContainer.style.display = 'block';
@@ -270,7 +270,7 @@
 
         async function buyNews(news_id) {
             try {
-                const response = await fetch("http://localhost:5007/buy", {
+                const response = await fetch("https://api.malgymnews.eu/buy", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ cookie, news_id })
@@ -292,7 +292,7 @@
 
         // Inicializace
         document.getElementById("logout-button").addEventListener("click", () => {
-            fetch("http://localhost:5007/logout", {
+            fetch("https://api.malgymnews.eu/logout", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ cookie })
@@ -320,4 +320,5 @@
         });
     </script>
 </body>
+
 </html>
