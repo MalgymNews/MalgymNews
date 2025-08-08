@@ -80,10 +80,11 @@
             z-index: 1001;
         }
 
-        #pdf-viewer {
+        #html-viewer {
             width: 100%;
             height: 100%;
             border: none;
+            background-color: white;
         }
 
         #back-button {
@@ -117,7 +118,6 @@
     </style>
 </head>
 <body>
-    <!-- Navigační lišta - stejná jako v index.html -->
     <nav class="navbar">
         <a href="index.html">Domů</a>
         <a href="onas.html">O nás</a>
@@ -144,7 +144,7 @@
 
     <div id="pdf-container">
         <button id="back-button">← Zpět na seznam novin</button>
-        <embed id="pdf-viewer" type="application/pdf">
+        <iframe id="html-viewer"></iframe>
     </div>
 
     <script>
@@ -162,7 +162,7 @@
                     body: JSON.stringify({ cookie })
                 });
                 const data = await response.json();
-                
+
                 if (data.status === "success") {
                     const username = await getUsernameFromCookie();
                     document.getElementById("welcome-msg").textContent = `Vítej, ${username}! Máš ${data.credits} kredit(ů).`;
@@ -180,7 +180,7 @@
                     body: JSON.stringify({ cookie })
                 });
                 const data = await response.json();
-                
+
                 if (data.status === "success") {
                     return data.username;
                 } else {
@@ -202,7 +202,7 @@
                     body: JSON.stringify({ cookie })
                 });
                 const data = await response.json();
-                
+
                 if (data.status === "success") {
                     const ownedDiv = document.getElementById("owned-news");
                     const notOwnedDiv = document.getElementById("not-owned-news");
@@ -210,7 +210,6 @@
                     ownedDiv.innerHTML = '';
                     notOwnedDiv.innerHTML = '';
 
-                    // Vlastněné noviny
                     for (const id in data.owned) {
                         const n = data.owned[id];
                         const box = document.createElement("div");
@@ -223,7 +222,6 @@
                         ownedDiv.appendChild(box);
                     }
 
-                    // Noviny k zakoupení
                     for (const id in data.not_owned) {
                         const n = data.not_owned[id];
                         const box = document.createElement("div");
@@ -243,29 +241,24 @@
         }
 
         function showNews(news_id) {
-            const pdfContainer = document.getElementById('pdf-container');
+            const container = document.getElementById('pdf-container');
             const newsContainer = document.getElementById('news-container');
             const backButton = document.getElementById('back-button');
-            
-            // Přidáme náhodný parametr, aby prohlížeč neukládal do cache
+
             const randomParam = Date.now();
-            const pdfUrl = `https://api.malgymnews.eu/get_news?cookie=${cookie}&news_id=${news_id}&t=${randomParam}`;
-            
-            document.getElementById('pdf-viewer').src = pdfUrl;
-            pdfContainer.style.display = 'block';
+            const htmlUrl = `https://api.malgymnews.eu/get_news?cookie=${cookie}&news_id=${news_id}&t=${randomParam}`;
+
+            document.getElementById('html-viewer').src = htmlUrl;
+            container.style.display = 'block';
             newsContainer.style.display = 'none';
             backButton.style.display = 'block';
         }
 
         function hideNews() {
-            const pdfContainer = document.getElementById('pdf-container');
-            const newsContainer = document.getElementById('news-container');
-            const backButton = document.getElementById('back-button');
-            
-            document.getElementById('pdf-viewer').src = '';
-            pdfContainer.style.display = 'none';
-            newsContainer.style.display = 'block';
-            backButton.style.display = 'none';
+            document.getElementById('html-viewer').src = '';
+            document.getElementById('pdf-container').style.display = 'none';
+            document.getElementById('news-container').style.display = 'block';
+            document.getElementById('back-button').style.display = 'none';
         }
 
         async function buyNews(news_id) {
@@ -276,11 +269,11 @@
                     body: JSON.stringify({ cookie, news_id })
                 });
                 const data = await response.json();
-                
+
                 if (data.status === "success") {
                     alert("Noviny byly úspěšně zakoupeny!");
-                    loadNews(); // Aktualizujeme seznam
-                    loadCredits(); // Aktualizujeme kredity
+                    loadNews();
+                    loadCredits();
                 } else {
                     alert("Chyba: " + (data.message || "Nepodařilo se zakoupit noviny"));
                 }
@@ -290,7 +283,6 @@
             }
         }
 
-        // Inicializace
         document.getElementById("logout-button").addEventListener("click", () => {
             fetch("https://api.malgymnews.eu/logout", {
                 method: "POST",
@@ -310,7 +302,6 @@
 
         document.getElementById("back-button").addEventListener("click", hideNews);
 
-        // Načteme data při startu
         Promise.all([
             getUsernameFromCookie(),
             loadCredits(),
@@ -320,5 +311,4 @@
         });
     </script>
 </body>
-
 </html>
