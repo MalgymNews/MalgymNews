@@ -165,3 +165,9 @@ body {
 .btn-read:hover {
   background-color: #0277bd;
 }
+
+.btn-join{
+  display: inline-block;
+  white-space: nowrap;   /* aby se text nezalamoval */
+  line-height: 1;        /* volitelné – kompaktnější výška */
+}
