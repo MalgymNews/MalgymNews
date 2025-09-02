@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Přístup k novinám</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.2, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
+    <meta name="gesture-handling" content="auto">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #111;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            touch-action: manipulation pinch-zoom;
+        }
+
+        .news-section {
+            margin: 20px;
+            padding: 15px;
+            background-color: #222;
+            border-radius: 8px;
+        }
+
+        .news-box {
+            background-color: white;
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px auto;
+            max-width: 400px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .news-box:hover {
+            transform: scale(1.02);
+        }
+
+        .buy-button {
+            background-color: orange;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            color: black;
+        }
+
+        .buy-button:hover {
+            background-color: darkorange;
+        }
+
+        #logout-button {
+            position: absolute;
+            top: 80px;
+            right: 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #logout-button:hover {
+            background-color: darkred;
+        }
+
+        #pdf-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1001;
+        }
+
+        #html-viewer {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background-color: white;
+        }
+
+        #back-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 1002;
+            display: none;
+        }
+
+        #back-button:hover {
+            background-color: #666;
+        }
+
+        h1, h2 {
+            color: orange;
+        }
+
+        #welcome-msg {
+            margin-bottom: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html">Domů</a>
+        <a href="onas.html">O nás</a>
+        <a href="precist.html" class="active">Přečíst</a>
+        <a href="register.html">Registrace</a>
+    </nav>
+
+    <button id="logout-button">Odhlásit se</button>
+
+    <h1 style="text-align: center;">Přístup k novinám</h1>
+    <div id="welcome-msg"></div>
+
+    <div id="news-container">
+        <div class="news-section">
+            <h2>📰 Noviny, které vlastníš</h2>
+            <div id="owned-news"></div>
+        </div>
+
+        <div class="news-section">
+            <h2>🛒 Noviny k zakoupení</h2>
+            <div id="not-owned-news"></div>
+        </div>
+    </div>
+
+    <div id="pdf-container">
+        <button id="back-button">← Zpět na seznam novin</button>
+        <iframe id="html-viewer"></iframe>
+    </div>
+
+    <script>
+        const cookie = localStorage.getItem("cookie");
+
+        if (!cookie) {
+            window.location.href = "login.html";
+        }
+
+        async function loadCredits() {
+            try {
+                const response = await fetch("https://api.malgymnews.eu/getcredits", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ cookie })
+                });
+                const data = await response.json();
+
+                if (data.status === "success") {
+                    const username = await getUsernameFromCookie();
+                    document.getElementById("welcome-msg").textContent = `Vítej, ${username}! Máš ${data.credits} kredit(ů).`;
+                }
+            } catch (error) {
+                console.error("Chyba při načítání kreditů:", error);
+            }
+        }
+
+        async function getUsernameFromCookie() {
+            try {
+                const response = await fetch("https://api.malgymnews.eu/loginwithcookie", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ cookie })
+                });
+                const data = await response.json();
+
+                if (data.status === "success") {
+                    return data.username;
+                } else {
+                    window.location.href = "login.html";
+                    return "";
+                }
+            } catch (error) {
+                console.error("Chyba při získávání uživatelského jména:", error);
+                window.location.href = "login.html";
+                return "";
+            }
+        }
+
+        async function loadNews() {
+            try {
+                const response = await fetch("https://api.malgymnews.eu/getnewsdata", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ cookie })
+                });
+                const data = await response.json();
+
+                if (data.status === "success") {
+                    const ownedDiv = document.getElementById("owned-news");
+                    const notOwnedDiv = document.getElementById("not-owned-news");
+
+                    ownedDiv.innerHTML = '';
+                    notOwnedDiv.innerHTML = '';
+
+                    for (const id in data.owned) {
+                        const n = data.owned[id];
+                        const box = document.createElement("div");
+                        box.className = "news-box";
+                        box.innerHTML = `
+                            <strong>${n.fname}</strong><br>
+                            <small>Cena: ${n.cost} kreditů</small>
+                        `;
+                        box.addEventListener('click', () => showNews(id));
+                        ownedDiv.appendChild(box);
+                    }
+
+                    for (const id in data.not_owned) {
+                        const n = data.not_owned[id];
+                        const box = document.createElement("div");
+                        box.className = "news-box";
+                        box.innerHTML = `
+                            <strong>${n.fname}</strong><br>
+                            <small>Cena: ${n.cost} kreditů</small><br>
+                            <button class="buy-button" onclick="event.stopPropagation(); buyNews('${id}')">Koupit</button>
+                        `;
+                        notOwnedDiv.appendChild(box);
+                    }
+                }
+            } catch (error) {
+                console.error("Chyba při načítání novin:", error);
+                alert("Nepodařilo se načíst seznam novin");
+            }
+        }
+
+        function showNews(news_id) {
+            const container = document.getElementById('pdf-container');
+            const newsContainer = document.getElementById('news-container');
+            const backButton = document.getElementById('back-button');
+
+            const randomParam = Date.now();
+            const htmlUrl = `https://api.malgymnews.eu/get_news?cookie=${cookie}&news_id=${news_id}&t=${randomParam}`;
+
+            document.getElementById('html-viewer').src = htmlUrl;
+            container.style.display = 'block';
+            newsContainer.style.display = 'none';
+            backButton.style.display = 'block';
+        }
+
+        function hideNews() {
+            document.getElementById('html-viewer').src = '';
+            document.getElementById('pdf-container').style.display = 'none';
+            document.getElementById('news-container').style.display = 'block';
+            document.getElementById('back-button').style.display = 'none';
+        }
+
+        async function buyNews(news_id) {
+            try {
+                const response = await fetch("https://api.malgymnews.eu/buy", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ cookie, news_id })
+                });
+                const data = await response.json();
+
+                if (data.status === "success") {
+                    alert("Noviny byly úspěšně zakoupeny!");
+                    loadNews();
+                    loadCredits();
+                } else {
+                    alert("Chyba: " + (data.message || "Nepodařilo se zakoupit noviny"));
+                }
+            } catch (error) {
+                console.error("Chyba při nákupu novin:", error);
+                alert("Došlo k chybě při komunikaci se serverem");
+            }
+        }
+
+        document.getElementById("logout-button").addEventListener("click", () => {
+            fetch("https://api.malgymnews.eu/logout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ cookie })
+            })
+            .then(() => {
+                localStorage.removeItem("cookie");
+                window.location.href = "login.html";
+            })
+            .catch(error => {
+                console.error("Chyba při odhlašování:", error);
+                localStorage.removeItem("cookie");
+                window.location.href = "login.html";
+            });
+        });
+
+        document.getElementById("back-button").addEventListener("click", hideNews);
+
+        Promise.all([
+            getUsernameFromCookie(),
+            loadCredits(),
+            loadNews()
+        ]).catch(error => {
+            console.error("Chyba při inicializaci:", error);
+        });
+    </script>
+</body>
+</html>
